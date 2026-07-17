@@ -1,0 +1,7 @@
+# Ignore compiled executables and build artifacts
+build/
+gauss
+lu
+rmc
+*.o
+*.a
