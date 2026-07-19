@@ -3,7 +3,8 @@
 #include <vector>
 
 
-void ALU(std::vector<std::vector<double>>&A,std::vector<std::vector<double>>&L,std::vector<std::vector<double>>&U){   
+
+void ALU(std::vector<std::vector<double>>& A, std::vector<std::vector<double>>& L, std::vector<std::vector<double>>& U){   
 
   // Elimination Algo
  //int prev=0;
