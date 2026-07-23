@@ -6,6 +6,7 @@
 std::vector<double>U;
 std::vector<double>P(row*col,0.0);
 std::vector<double>L(row*col,0.0);
+std::vector<double>buffer(row*col,0.0); // to hold swap row-col value
 
 /*void AV(){
   // P matrix
@@ -38,11 +39,11 @@ void AV(){
 void PALU(std::vector<double>&A){
 	U=A;
 	AV();
-	int swap_row;// the row replacing the bad row
+	int swap_row;// i=1 the row replacing the bad row
 	int swap_col;
-	int current_row; // this is where the error occurs
-	int current_col;
-	std::vector<double>buffer(row*col,0.0); // to hold swap row-col value
+	int current_row; //  i=0 this is where the error occurs
+	int current_col; //j=1
+	/*std::vector<double>buffer(row*col,0.0); // to hold swap row-col value*/
 	// first loop through to scan the matrix
 	for(int i=0;i<row;i++){
 		for(int j=0;j<col;j++){
@@ -56,19 +57,19 @@ void PALU(std::vector<double>&A){
 					swap_col=j; 
 				}
 				// check swap row and column and take to buffer
-				int target_col_prev=j-1;
-				int target_col= swap_col;
-				int target_col_forw=swap_col+1;
+				int target_col= swap_col;// 0
+				int target_col_forw=swap_col+1; // 1
+				int target_col_dforw=target_col_forw+1; //2
 				if(U[swap_row*col+current_col]!=0){
-					if(target_col_prev>=0 && target_col_forw<=col){
-						// holds the swap row of U matrix
-						buffer.push_back(U[swap_row*col+target_col_prev]);
-						buffer.push_back(U[swap_row*col+target_col]);
-						buffer.push_back(U[swap_row*col+target_col_forw]);
+					if(target_col>=0 && target_col_dforw<=col){
+						// holds the swap row of U matrix 2nd row 
+						buffer[0]=U[swap_row*col+target_col]; 
+						buffer[1]=U[swap_row*col+target_col_forw];
+						buffer[2]=U[swap_row*col+target_col_dforw];
 						// holds the swap row of P matrix 	
-						buffer.push_back(P[swap_row*col+target_col_prev]);
-						buffer.push_back(P[swap_row*col+target_col]);
-						buffer.push_back(P[swap_row*col+target_col_forw]);
+						buffer[3]=P[swap_row*col+target_col];
+						buffer[4]=P[swap_row*col+target_col_forw];
+						buffer[5]=P[swap_row*col+target_col_dforw];
 					}else{
 						std::cerr<<"Error in buffer operation";
 					}
@@ -106,7 +107,7 @@ void PALU(std::vector<double>&A){
 	P[current_row*col+target_col1_forw]=buffer[4];
 	P[current_row*col+target_col1_dforw]=buffer[5];
 
-	// Gaussian Elimination Loop 
+	// Gaussian Elimination Loop
 	Optimized_ALU(A,L,U);
 
 }
